@@ -18,7 +18,7 @@ export async function POST(request) {
     const authHeader = request.headers.get('authorization');
 
     // Cek authorization header
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!authHeader || !authHeader?.startsWith('Bearer ')) {
       return new Response(
         JSON.stringify({ success: false, error: 'Unauthorized' }),
         { status: 401 }
