@@ -14,22 +14,25 @@ async function connectToDatabase() {
 
 export async function POST(request) {
   try {
-    // Get authorization header
+    // Pastikan authHeader diambil **di dalam handler**
     const authHeader = request.headers.get('authorization');
+
+    // Cek authorization header
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return Response.json({ 
-        success: false, 
-        error: 'Unauthorized' 
-      }, { status: 401 });
+      return new Response(
+        JSON.stringify({ success: false, error: 'Unauthorized' }),
+        { status: 401 }
+      );
     }
 
+    // Ambil body request
     const { uid, email, displayName, photoURL, language } = await request.json();
 
     if (!uid || !email) {
-      return Response.json({ 
-        success: false, 
-        error: 'Missing required fields' 
-      }, { status: 400 });
+      return new Response(
+        JSON.stringify({ success: false, error: 'Missing required fields' }),
+        { status: 400 }
+      );
     }
 
     // Connect to MongoDB
@@ -41,31 +44,34 @@ export async function POST(request) {
 
     if (existingUser) {
       // Update existing user
-      const result = await usersCollection.updateOne(
+      await usersCollection.updateOne(
         { uid },
-        { 
-          $set: { 
+        {
+          $set: {
             lastLoginAt: new Date(),
             language: language || 'english',
             displayName,
             photoURL,
             email
-          } 
+          }
         }
       );
 
-      return Response.json({ 
-        success: true, 
-        message: 'User updated',
-        isNewUser: false,
-        user: {
-          uid,
-          email,
-          displayName,
-          photoURL,
-          language: language || 'english'
-        }
-      });
+      return new Response(
+        JSON.stringify({
+          success: true,
+          message: 'User updated',
+          isNewUser: false,
+          user: {
+            uid,
+            email,
+            displayName,
+            photoURL,
+            language: language || 'english'
+          }
+        }),
+        { status: 200 }
+      );
     } else {
       // Create new user
       const newUser = {
@@ -85,19 +91,21 @@ export async function POST(request) {
 
       await usersCollection.insertOne(newUser);
 
-      return Response.json({ 
-        success: true, 
-        message: 'User created',
-        isNewUser: true,
-        user: newUser
-      });
+      return new Response(
+        JSON.stringify({
+          success: true,
+          message: 'User created',
+          isNewUser: true,
+          user: newUser
+        }),
+        { status: 200 }
+      );
     }
-
   } catch (error) {
     console.error('Error saving user to MongoDB:', error);
-    return Response.json({ 
-      success: false, 
-      error: error.message 
-    }, { status: 500 });
+    return new Response(
+      JSON.stringify({ success: false, error: error.message }),
+      { status: 500 }
+    );
   }
 }
