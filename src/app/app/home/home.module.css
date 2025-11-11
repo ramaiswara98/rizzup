@@ -1,0 +1,233 @@
+/* RizzUpHome.module.css */
+
+.phoneFrame {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40px 20px;
+}
+
+.container {
+  max-width: 375px;
+  width: 100%;
+  background: #ffffff;
+  min-height: 812px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  display: flex;
+  flex-direction: column;
+  border-radius: 40px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 24px 20px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2B7FFF;
+  margin: 0;
+}
+
+.rizzScore {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.scoreLabel {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.scoreCircle {
+  position: relative;
+  width: 50px;
+  height: 50px;
+}
+
+.scoreNumber {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+}
+
+.welcome {
+  padding: 0 24px 24px;
+}
+
+.welcomeTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 8px 0;
+}
+
+.welcomeSubtitle {
+  font-size: 16px;
+  color: #666;
+  margin: 0;
+}
+
+.features {
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.featureCard {
+  background: #f8f9fa;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.featureCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.iconContainer {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.iconContainer.blue {
+  background: #E3F2FD;
+  color: #2B7FFF;
+}
+
+.iconContainer.orange {
+  background: #FFF4E6;
+  color: #FF9500;
+}
+
+.iconContainer.purple {
+  background: #F3E5F5;
+  color: #7B61FF;
+}
+
+.featureContent {
+  flex: 1;
+}
+
+.featureTitle {
+  font-size: 17px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 4px 0;
+}
+
+.featureDescription {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.arrow {
+  font-size: 24px;
+  color: #ccc;
+  font-weight: 300;
+}
+
+.progress {
+  margin-top: 32px;
+  padding: 24px;
+  background: #f8f9fa;
+  border-radius: 24px 24px 0 0;
+  flex: 1;
+}
+
+.progressTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 24px 0;
+}
+
+.stats {
+  display: flex;
+  gap: 24px;
+}
+
+.stat {
+  flex: 1;
+  text-align: center;
+}
+
+.statNumber {
+  font-size: 48px;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.blueText {
+  color: #2B7FFF;
+}
+
+.orangeText {
+  color: #FF9500;
+}
+
+.statLabel {
+  font-size: 14px;
+  color: #666;
+}
+
+.bottomNav {
+  display: flex;
+  background: #ffffff;
+  border-top: 1px solid #e0e0e0;
+  padding: 8px 0 24px;
+}
+
+.navItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 8px;
+  color: #999;
+  transition: color 0.2s;
+}
+
+.navItem.active {
+  color: #2B7FFF;
+}
+
+.navItem span {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.navItem:hover {
+  color: #2B7FFF;
+}

@@ -1,0 +1,287 @@
+/* ImproveConversation.module.css */
+
+.phoneFrame {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40px 20px;
+}
+
+.container {
+  max-width: 375px;
+  width: 100%;
+  background: #F8F9FA;
+  min-height: 812px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  display: flex;
+  flex-direction: column;
+  border-radius: 40px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  position: relative;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 16px;
+  background: #ffffff;
+}
+
+.backButton,
+.historyButton {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 16px 160px;
+}
+
+.uploadSection {
+  background: #ffffff;
+  border: 2px dashed #D0D0D0;
+  border-radius: 20px;
+  padding: 40px 20px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.uploadIcon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.uploadText {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 20px 0;
+  line-height: 1.5;
+}
+
+.uploadButtons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.uploadButton {
+  background: #6366F1;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.uploadButton:hover {
+  background: #4F46E5;
+}
+
+.pasteButton {
+  background: #F5F5F5;
+  color: #333;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pasteButton:hover {
+  background: #E0E0E0;
+}
+
+.toneSection {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.sectionTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 12px 0;
+}
+
+.toneButtons {
+  display: flex;
+  gap: 10px;
+}
+
+.toneButton {
+  flex: 1;
+  background: #F5F5F5;
+  border: none;
+  border-radius: 24px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #333;
+}
+
+.toneButton.selected {
+  background: #6366F1;
+  color: white;
+}
+
+.toneButton:hover {
+  background: #6366F1;
+  color: white;
+}
+
+.suggestionsSection {
+  margin-bottom: 24px;
+}
+
+.suggestionCard {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.suggestionText {
+  font-size: 15px;
+  color: #1a1a1a;
+  margin: 0 0 12px 0;
+  line-height: 1.5;
+}
+
+.suggestionActions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.selectButton {
+  background: #6366F1;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.selectButton:hover {
+  background: #4F46E5;
+}
+
+.selectedButton {
+  background: #4F46E5;
+}
+
+.copyButton {
+  background: #F5F5F5;
+  color: #333;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s;
+}
+
+.copyButton:hover {
+  background: #E0E0E0;
+}
+
+.suggestionDescription {
+  font-size: 12px;
+  color: #999;
+  margin: 0;
+}
+
+.bottomActions {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  padding: 16px;
+  border-top: 1px solid #E0E0E0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-radius: 0 0 40px 40px;
+}
+
+.copyAndSendButton {
+  width: 100%;
+  background: #6366F1;
+  color: white;
+  border: none;
+  border-radius: 28px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.copyAndSendButton:hover {
+  background: #4F46E5;
+}
+
+.saveToHistoryButton {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px;
+}
+
+.saveToHistoryButton:hover {
+  color: #333;
+}

@@ -1,0 +1,362 @@
+/* RateMyConvo.module.css */
+
+.phoneFrame {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40px 20px;
+}
+
+.container {
+  max-width: 375px;
+  width: 100%;
+  background: #ffffff;
+  min-height: 812px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  display: flex;
+  flex-direction: column;
+  border-radius: 40px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  position: relative;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.backButton,
+.historyButton {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 16px 160px;
+}
+
+.uploadSection {
+  background: linear-gradient(135deg, #E8E9FF 0%, #F5F0FF 100%);
+  border: 2px dashed #B8B9FF;
+  border-radius: 20px;
+  padding: 40px 20px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.uploadIcon {
+  width: 64px;
+  height: 64px;
+  background: #6366F1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.uploadTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 8px 0;
+}
+
+.uploadSubtitle {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 20px 0;
+}
+
+.chooseFileButton {
+  background: #6366F1;
+  color: white;
+  border: none;
+  border-radius: 24px;
+  padding: 12px 32px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.chooseFileButton:hover {
+  background: #4F46E5;
+}
+
+.scoreSection {
+  background: #ffffff;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.scoreHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.scoreTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.excellentBadge {
+  background: #E8F5E9;
+  color: #4CAF50;
+  padding: 6px 16px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.scoreCircleContainer {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  margin: 0 auto 20px;
+}
+
+.scoreText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.scoreNumber {
+  font-size: 56px;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1;
+}
+
+.scoreMax {
+  font-size: 18px;
+  color: #999;
+  font-weight: 500;
+}
+
+.scoreMessage {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.feedbackSection {
+  margin-bottom: 24px;
+}
+
+.feedbackTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 16px 0;
+}
+
+.feedbackItem {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background: #F8F9FA;
+  border-radius: 16px;
+  margin-bottom: 12px;
+}
+
+.feedbackIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 20px;
+}
+
+.feedbackContent {
+  flex: 1;
+}
+
+.feedbackItemTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 4px 0;
+}
+
+.feedbackItemDescription {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.bottomActions {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  padding: 16px;
+  border-top: 1px solid #E0E0E0;
+  border-radius: 0 0 40px 40px;
+}
+
+.saveButton {
+  width: 100%;
+  background: #6366F1;
+  color: white;
+  border: none;
+  border-radius: 28px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 12px;
+}
+
+.saveButton:hover {
+  background: #4F46E5;
+}
+
+.secondaryActions {
+  display: flex;
+  gap: 8px;
+}
+
+.copyButton {
+  flex: 1;
+  background: #F5F5F5;
+  color: #333;
+  border: none;
+  border-radius: 24px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background 0.2s;
+}
+
+.copyButton:hover {
+  background: #E0E0E0;
+}
+
+.shareButton {
+  width: 48px;
+  height: 48px;
+  background: #F5F5F5;
+  color: #333;
+  border: none;
+  border-radius: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.shareButton:hover {
+  background: #E0E0E0;
+}
+
+.previewContainer {
+  width: 100%;
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.previewImage {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.removeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.removeButton:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.fileName {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+}
+
+.rankButton {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.rankButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.rankButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.loadingState {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+  font-size: 16px;
+}

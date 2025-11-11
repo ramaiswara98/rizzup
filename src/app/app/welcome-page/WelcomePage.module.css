@@ -1,0 +1,356 @@
+
+.phoneFrame {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40px 20px;
+}
+/* Container */
+.container {
+  max-width: 375px;
+  width: 100%;
+  background: #ffffff;
+  min-height: 812px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  display: flex;
+  flex-direction: column;
+  border-radius: 40px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  padding: 10px;
+}
+
+.content {
+  width: 100%;
+  max-width: 28rem;
+}
+
+/* Illustration */
+.illustration {
+  position: relative;
+  height: 20rem;
+  margin-bottom: 2rem;
+}
+
+.backgroundCircle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 18rem;
+  height: 18rem;
+  background: linear-gradient(to bottom right, #e9d5ff, #c7d2fe);
+  border-radius: 50%;
+  opacity: 0.6;
+}
+
+.centerIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4rem;
+  height: 4rem;
+  background: #818cf8;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+/* Bubbles */
+.bubble {
+  position: absolute;
+  border-radius: 1rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  animation: float 3s ease-in-out infinite;
+}
+
+.bubbleHey {
+  top: 3rem;
+  left: 2rem;
+  background: white;
+  padding: 0.75rem 1.25rem;
+  animation-delay: 0s;
+}
+
+.bubbleText {
+  color: #1f2937;
+  font-weight: 500;
+  margin: 0;
+}
+
+.onlineIndicator {
+  width: 0.75rem;
+  height: 0.75rem;
+  background: #4ade80;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+}
+
+.bubbleStar {
+  top: 2rem;
+  right: 3rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  background: #4f46e5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation-delay: 0.5s;
+}
+
+.bubbleNice {
+  top: 8rem;
+  right: 1rem;
+  background: #4f46e5;
+  padding: 0.75rem 1.5rem;
+  border-radius: 1.5rem;
+  animation-delay: 1s;
+}
+
+.bubbleTextWhite {
+  color: white;
+  font-weight: 500;
+  margin: 0;
+}
+
+.bubbleHeart {
+  bottom: 2rem;
+  right: 4rem;
+  width: 4rem;
+  height: 4rem;
+  background: linear-gradient(to bottom right, #a855f7, #ec4899);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation-delay: 1.5s;
+}
+
+.bubbleChat {
+  bottom: 4rem;
+  left: 1rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  background: #3b82f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation-delay: 2s;
+}
+
+/* Decorative Circles */
+.decorCircle {
+  position: absolute;
+  border-radius: 50%;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.decorCircle1 {
+  top: 6rem;
+  left: 0.5rem;
+  width: 1rem;
+  height: 1rem;
+  background: #f9a8d4;
+}
+
+.decorCircle2 {
+  top: 1rem;
+  right: 6rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  background: #d8b4fe;
+  animation-delay: 1s;
+}
+
+.decorCircle3 {
+  bottom: 1rem;
+  right: 1rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  background: #fbbf24;
+  animation-delay: 0.5s;
+}
+
+.decorCircle4 {
+  bottom: 8rem;
+  left: 6rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: #93c5fd;
+  animation-delay: 1.5s;
+}
+
+/* Welcome Section */
+.welcomeSection {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.welcomeTitle {
+  font-size: 2.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.brandName {
+  background: linear-gradient(to right, #4f46e5, #9333ea);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.welcomeSubtitle {
+  color: #4b5563;
+  font-size: 1.125rem;
+  line-height: 1.75;
+}
+
+/* Language Section */
+.languageSection {
+  margin-bottom: 2rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+.languageLabel {
+  text-align: center;
+  color: #374151;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.languageButtons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.languageButton {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  padding: 0.1rem;
+  border: 2px solid #e5e7eb;
+  background: white;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.languageButton:hover {
+  border-color: #c7d2fe;
+}
+
+.languageButtonActive {
+  background: linear-gradient(to bottom right, #4f46e5, #9333ea);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transform: scale(1.05);
+}
+
+.languageButtonIndonesia:hover {
+  border-color: #fecaca;
+}
+
+.languageButtonActiveIndonesia {
+  background: linear-gradient(to bottom right, #dc2626, #ef4444);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transform: scale(1.05);
+}
+
+.languageContent {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.languageFlag {
+  font-size: 1.875rem;
+}
+
+.languageName {
+  font-weight: 600;
+}
+
+.languageGlow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom right, rgba(99, 102, 241, 0.2), rgba(147, 51, 234, 0.2));
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.languageGlowRed {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom right, rgba(220, 38, 38, 0.2), rgba(239, 68, 68, 0.2));
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Next Button */
+.nextButton {
+  width: 100%;
+  background: linear-gradient(to right, #4f46e5, #9333ea);
+  color: white;
+  font-weight: 600;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.nextButton:hover {
+  background: linear-gradient(to right, #4338ca, #7e22ce);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  transform: scale(1.05);
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .welcomeTitle {
+    font-size: 1.875rem;
+  }
+  
+  .illustration {
+    height: 16rem;
+  }
+  
+  .backgroundCircle {
+    width: 14rem;
+    height: 14rem;
+  }
+}
