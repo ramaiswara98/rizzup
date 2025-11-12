@@ -97,12 +97,79 @@ export default function RateMyConvo() {
     }
   };
 
-  const handleCopyTips = () => {
-    const tipsText = feedbackItems.map(item => 
-      `${item.title}\n${item.description}`
-    ).join('\n\n');
-    navigator.clipboard.writeText(tipsText);
-    alert(t.rateRizzPage.tipsCopied);
+  const handleSaveToHistory = async () => {
+    console.log('Save to history clicked');
+    console.log('Has analyzed:', hasAnalyzed);
+    console.log('Rizz score:', rizzScore);
+    
+    if (!hasAnalyzed) {
+      alert(t.rateRizzPage.failed);
+      return;
+    }
+
+    try {
+      const userString = localStorage.getItem('user');
+      console.log('User string from localStorage:', userString);
+      
+      if (!userString) {
+        alert('Please login first');
+        return;
+      }
+
+      const user = JSON.parse(userString);
+      console.log('Parsed user:', user);
+
+      const historyData = {
+        uid: user.uid,
+        type: 'rate-rizz',
+        data: {
+          rizzScore: rizzScore,
+          scoreLabel: scoreLabel,
+          scoreMessage: scoreMessage,
+          feedbackItems: feedbackItems
+        },
+        preview: `${t.rateRizzPage.rizzScore}: ${rizzScore}/100 - ${scoreLabel}`,
+        imageUrl: previewUrl,
+        score: rizzScore
+      };
+
+      console.log('Sending history data:', historyData);
+
+      const response = await fetch('/api/user/history', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(historyData)
+      });
+
+      const data = await response.json();
+      console.log('History response:', data);
+      
+      if (data.success) {
+        console.log('History saved successfully, updating stats...');
+        
+        // Update user stats
+        const statsResponse = await fetch('/api/user/update-stats', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            uid: user.uid,
+            type: 'conversationRated',
+            rizzScore: rizzScore
+          })
+        });
+
+        const statsData = await statsResponse.json();
+        console.log('Stats response:', statsData);
+
+        alert(t.rateRizzPage.saved);
+      } else {
+        console.error('Failed to save history:', data);
+        alert(t.rateRizzPage.errorSaving);
+      }
+    } catch (error) {
+      console.error('Error saving to history:', error);
+      alert(t.rateRizzPage.errorSaving);
+    }
   };
 
   const getScoreBadgeColor = () => {
@@ -277,20 +344,15 @@ export default function RateMyConvo() {
         {/* Bottom Actions - Only show after analysis */}
         {hasAnalyzed && (
           <div className={styles.bottomActions}>
-            <button className={styles.saveButton}>{t.rateRizzPage.saveButton}</button>
-            <div className={styles.secondaryActions}>
-              <button className={styles.copyButton} onClick={handleCopyTips}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" fill="currentColor"/>
-                </svg>
-                {t.rateRizzPage.copyTips}
-              </button>
-              <button className={styles.shareButton}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z" fill="currentColor"/>
-                </svg>
-              </button>
-            </div>
+            <button 
+              className={styles.saveButton}
+              onClick={handleSaveToHistory}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z" fill="currentColor"/>
+              </svg>
+              {t.rateRizzPage.saveToHistory}
+            </button>
           </div>
         )}
       </div>

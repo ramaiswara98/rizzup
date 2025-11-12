@@ -79,13 +79,76 @@ export default function StartConversation() {
     alert(t.startConversationPage.copied);
   };
 
-  const handleCopyAndSend = () => {
-    if (selectedSuggestion !== null) {
-      const text = suggestions[selectedSuggestion].text;
-      navigator.clipboard.writeText(text);
-      alert(t.startConversationPage.copiedSend);
-    } else {
-      alert(t.startConversationPage.selectFirst);
+  const handleSaveToHistory = async () => {
+    console.log('Save to history clicked');
+    console.log('Suggestions:', suggestions);
+    console.log('Name:', name);
+    
+    if (suggestions.length === 0) {
+      alert(t.startConversationPage.failed);
+      return;
+    }
+
+    try {
+      const userString = localStorage.getItem('user');
+      console.log('User string from localStorage:', userString);
+      
+      if (!userString) {
+        alert('Please login first');
+        return;
+      }
+
+      const user = JSON.parse(userString);
+      console.log('Parsed user:', user);
+
+      const historyData = {
+        uid: user.uid,
+        type: 'start-conversation',
+        data: { 
+          name: name,
+          relation: relation,
+          topic: topic,
+          tone: selectedTone,
+          suggestions: suggestions 
+        },
+        preview: `Conversation with ${name}: ${suggestions[0]?.text || ''}`
+      };
+
+      console.log('Sending history data:', historyData);
+
+      const response = await fetch('/api/user/history', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(historyData)
+      });
+
+      const data = await response.json();
+      console.log('History response:', data);
+      
+      if (data.success) {
+        console.log('History saved successfully, updating stats...');
+        
+        // Update user stats
+        const statsResponse = await fetch('/api/user/update-stats', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            uid: user.uid,
+            type: 'conversationStarted'
+          })
+        });
+
+        const statsData = await statsResponse.json();
+        console.log('Stats response:', statsData);
+
+        alert(t.startConversationPage.saved);
+      } else {
+        console.error('Failed to save history:', data);
+        alert(t.startConversationPage.errorSaving);
+      }
+    } catch (error) {
+      console.error('Error saving to history:', error);
+      alert(t.startConversationPage.errorSaving);
     }
   };
 
@@ -231,24 +294,20 @@ export default function StartConversation() {
           )}
         </div>
 
-        {/* Bottom Actions */}
-        <div className={styles.bottomActions}>
-          <button 
-            className={styles.copyAndSendButton}
-            onClick={handleCopyAndSend}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" fill="white"/>
-            </svg>
-            {t.startConversationPage.copyAndSend}
-          </button>
-          <button className={styles.saveToHistoryButton}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z" fill="currentColor"/>
-            </svg>
-            {t.startConversationPage.saveToHistory}
-          </button>
-        </div>
+        {/* Bottom Actions - REPLACED WITH SAVE TO HISTORY ONLY */}
+        {suggestions.length > 0 && (
+          <div className={styles.bottomActions}>
+            <button 
+              className={styles.saveToHistoryButton}
+              onClick={handleSaveToHistory}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z" fill="currentColor"/>
+              </svg>
+              {t.startConversationPage.saveToHistory}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -49,7 +49,9 @@ export const translations = {
       saveToHistory: "Save to History",
       uploadFirst: "Please upload an image first",
       failed: "Failed to generate suggestions. Please try again.",
-      copied: "Copied to clipboard!"
+      copied: "Copied to clipboard!",
+      saved: "Saved to history!",
+      errorSaving: "Failed to save to history"
     },
     startConversationPage: {
       title: "Start Conversation",
@@ -85,7 +87,9 @@ export const translations = {
       errorGenerating: "Error generating suggestions. Please try again.",
       copied: "Copied to clipboard!",
       copiedSend: "Copied to clipboard! Now you can paste it in your chat.",
-      selectFirst: "Please select a suggestion first"
+      selectFirst: "Please select a suggestion first",
+      saved: "Saved to history!",
+      errorSaving: "Failed to save to history"
     },
     rateRizzPage: {
       title: "Rate My Convo",
@@ -111,7 +115,120 @@ export const translations = {
       failed: "Failed to analyze conversation. Please try again.",
       errorAnalyzing: "Error analyzing conversation. Please try again.",
       errorReading: "Error reading file. Please try again.",
-      tipsCopied: "Tips copied to clipboard!"
+      tipsCopied: "Tips copied to clipboard!",
+      saveToHistory: "Save to History",
+      saved: "Saved to history!",
+      errorSaving: "Failed to save to history"
+    },
+    loginPage: {
+      welcomeTo: "Welcome to",
+      appName: "RizzUp",
+      subtitle: "Boost your conversations, get AI suggestions, and improve your rizz",
+      continueWithGoogle: "Continue with Google",
+      signingIn: "Signing in...",
+      errorTitle: "Sign In Error",
+      errorMessage: "Failed to sign in with Google. Please try again."
+    },
+    profilePage: {
+      title: "Profile",
+      myStats: "My Stats",
+      rizzScore: "Rizz Score",
+      suggestionsUsed: "Suggestions Used",
+      conversationsStarted: "Conversations Started",
+      conversationsRated: "Conversations Rated",
+      settings: "Settings",
+      language: "Language",
+      english: "English",
+      indonesia: "Indonesia",
+      notifications: "Notifications",
+      notificationsDesc: "Get notified about tips and updates",
+      darkMode: "Dark Mode",
+      darkModeDesc: "Switch to dark theme",
+      account: "Account",
+      editProfile: "Edit Profile",
+      privacyPolicy: "Privacy Policy",
+      termsOfService: "Terms of Service",
+      logout: "Logout",
+      logoutConfirm: "Are you sure you want to logout?",
+      cancel: "Cancel",
+      confirmLogout: "Yes, Logout"
+    },
+    historyPage: {
+      title: "History",
+      noHistory: "No history yet",
+      noHistoryDesc: "Your AI conversation suggestions and ratings will appear here",
+      suggestedReply: "Suggested Reply",
+      startConversation: "Start Conversation",
+      rateRizz: "Rate My Rizz",
+      score: "Score",
+      viewDetails: "View Details",
+      delete: "Delete",
+      deleteConfirm: "Are you sure you want to delete this history item?",
+      cancel: "Cancel",
+      confirmDelete: "Yes, Delete",
+      deleted: "History item deleted",
+      errorDelete: "Failed to delete history item",
+      today: "Today",
+      yesterday: "Yesterday",
+      thisWeek: "This Week",
+      older: "Older"
+    },
+    onboardingPage: {
+      skip: "Skip",
+      next: "Next",
+      getStarted: "Get Started",
+      slides: [
+        {
+          title: "Welcome to RizzUp",
+          subtitle: "Your AI-powered conversation assistant",
+          description: "Master the art of conversation with AI-generated suggestions tailored to your style"
+        },
+        {
+          title: "Get Suggested Replies",
+          subtitle: "Never run out of words",
+          description: "Upload a story or chat screenshot and get perfect AI-generated replies in your chosen tone"
+        },
+        {
+          title: "Start Conversations",
+          subtitle: "Break the ice with confidence",
+          description: "Get personalized conversation starters based on who you're talking to and what you want to discuss"
+        },
+        {
+          title: "Rate Your Rizz",
+          subtitle: "Improve your conversation skills",
+          description: "Upload your chats and get honest AI feedback with actionable tips to level up your game"
+        }
+      ]
+    },
+    upgradeRizzPage: {
+      title: "You're all set!",
+      subtitle: "Start boosting your conversations now with",
+      appName: "RizzUp",
+      suggestedReply: "Suggested Reply",
+      boostConversation: "Boost Conversation",
+      rateMyConvo: "Rate My Convo",
+      upgradeButton: "Upgrade Your Rizz",
+      termsText: "By continuing, you agree to our",
+      termsOfService: "Terms of Service",
+      and: "and",
+      privacyPolicy: "Privacy Policy"
+    },
+    rateResponsePage: {
+      title: "Test Your Rizz",
+      subtitle: "Reply chat in this scenario, and AI will rate your rizz",
+      generateScenario: "Generate Scenario",
+      generating: "Generating...",
+      typeReply: "Type your reply...",
+      send: "Send",
+      analyzing: "Analyzing...",
+      score: "Score",
+      nextScenario: "Next",
+      scenarioContext: "Scenario Context",
+      you: "You",
+      aiFeedback: "AI Feedback & Rating",
+      strengths: "Strengths",
+      improvements: "Areas to Improve",
+      suggestion: "Suggestion"
     }
   },
   indonesia: {
@@ -162,7 +279,9 @@ export const translations = {
       saveToHistory: "Simpan ke Riwayat",
       uploadFirst: "Mohon unggah gambar terlebih dahulu",
       failed: "Gagal membuat saran. Silakan coba lagi.",
-      copied: "Disalin ke clipboard!"
+      copied: "Disalin ke clipboard!",
+      saved: "Tersimpan ke riwayat!",
+      errorSaving: "Gagal menyimpan ke riwayat"
     },
     startConversationPage: {
       title: "Mulai Percakapan",
@@ -198,7 +317,9 @@ export const translations = {
       errorGenerating: "Error membuat saran. Silakan coba lagi.",
       copied: "Disalin ke clipboard!",
       copiedSend: "Disalin ke clipboard! Sekarang kamu bisa paste di chat.",
-      selectFirst: "Mohon pilih saran terlebih dahulu"
+      selectFirst: "Mohon pilih saran terlebih dahulu",
+      saved: "Tersimpan ke riwayat!",
+      errorSaving: "Gagal menyimpan ke riwayat"
     },
     rateRizzPage: {
       title: "Nilai Percakapan Saya",
@@ -224,79 +345,120 @@ export const translations = {
       failed: "Gagal menganalisis percakapan. Silakan coba lagi.",
       errorAnalyzing: "Error menganalisis percakapan. Silakan coba lagi.",
       errorReading: "Error membaca file. Silakan coba lagi.",
-      tipsCopied: "Tips disalin ke clipboard!"
+      tipsCopied: "Tips disalin ke clipboard!",
+      saveToHistory: "Simpan ke Riwayat",
+      saved: "Tersimpan ke riwayat!",
+      errorSaving: "Gagal menyimpan ke riwayat"
+    },
+    loginPage: {
+      welcomeTo: "Selamat datang di",
+      appName: "RizzUp",
+      subtitle: "Tingkatkan percakapanmu, dapatkan saran AI, dan perbaiki rizz-mu",
+      continueWithGoogle: "Lanjutkan dengan Google",
+      signingIn: "Masuk...",
+      errorTitle: "Error Masuk",
+      errorMessage: "Gagal masuk dengan Google. Silakan coba lagi."
+    },
+    profilePage: {
+      title: "Profil",
+      myStats: "Statistik Saya",
+      rizzScore: "Skor Rizz",
+      suggestionsUsed: "Saran Digunakan",
+      conversationsStarted: "Percakapan Dimulai",
+      conversationsRated: "Percakapan Dinilai",
+      settings: "Pengaturan",
+      language: "Bahasa",
+      english: "English",
+      indonesia: "Indonesia",
+      notifications: "Notifikasi",
+      notificationsDesc: "Dapatkan notifikasi tentang tips dan update",
+      darkMode: "Mode Gelap",
+      darkModeDesc: "Beralih ke tema gelap",
+      account: "Akun",
+      editProfile: "Edit Profil",
+      privacyPolicy: "Kebijakan Privasi",
+      termsOfService: "Ketentuan Layanan",
+      logout: "Keluar",
+      logoutConfirm: "Apakah kamu yakin ingin keluar?",
+      cancel: "Batal",
+      confirmLogout: "Ya, Keluar"
+    },
+    historyPage: {
+      title: "Riwayat",
+      noHistory: "Belum ada riwayat",
+      noHistoryDesc: "Saran percakapan AI dan penilaianmu akan muncul di sini",
+      suggestedReply: "Saran Balasan",
+      startConversation: "Mulai Percakapan",
+      rateRizz: "Nilai Rizz Saya",
+      score: "Skor",
+      viewDetails: "Lihat Detail",
+      delete: "Hapus",
+      deleteConfirm: "Apakah kamu yakin ingin menghapus riwayat ini?",
+      cancel: "Batal",
+      confirmDelete: "Ya, Hapus",
+      deleted: "Riwayat dihapus",
+      errorDelete: "Gagal menghapus riwayat",
+      today: "Hari Ini",
+      yesterday: "Kemarin",
+      thisWeek: "Minggu Ini",
+      older: "Lebih Lama"
+    },
+    onboardingPage: {
+      skip: "Lewati",
+      next: "Lanjut",
+      getStarted: "Mulai",
+      slides: [
+        {
+          title: "Selamat Datang di RizzUp",
+          subtitle: "Asisten percakapan bertenaga AI",
+          description: "Kuasai seni percakapan dengan saran AI yang disesuaikan dengan gaya kamu"
+        },
+        {
+          title: "Dapatkan Saran Balasan",
+          subtitle: "Tidak pernah kehabisan kata",
+          description: "Unggah story atau screenshot chat dan dapatkan balasan sempurna dari AI dengan nada pilihanmu"
+        },
+        {
+          title: "Mulai Percakapan",
+          subtitle: "Pecahkan kebekuan dengan percaya diri",
+          description: "Dapatkan pembuka percakapan personal berdasarkan dengan siapa kamu bicara dan apa yang ingin dibahas"
+        },
+        {
+          title: "Nilai Rizz Kamu",
+          subtitle: "Tingkatkan kemampuan percakapanmu",
+          description: "Unggah chat-mu dan dapatkan feedback jujur dari AI dengan tips yang bisa langsung dipraktekkan"
+        }
+      ]
+    },
+    upgradeRizzPage: {
+      title: "Semua sudah siap!",
+      subtitle: "Mulai tingkatkan percakapanmu sekarang dengan",
+      appName: "RizzUp",
+      suggestedReply: "Saran Balasan",
+      boostConversation: "Tingkatkan Percakapan",
+      rateMyConvo: "Nilai Percakapan Saya",
+      upgradeButton: "Tingkatkan Rizz Kamu",
+      termsText: "Dengan melanjutkan, kamu setuju dengan",
+      termsOfService: "Ketentuan Layanan",
+      and: "dan",
+      privacyPolicy: "Kebijakan Privasi"
+    },
+    rateResponsePage: {
+      title: "Test Rizz Kamu",
+      subtitle: "Balas chat dalam skenario, dan AI akan menilai rizz kamu",
+      generateScenario: "Buat Skenario",
+      generating: "Membuat...",
+      typeReply: "Tulis balesanmu...",
+      send: "Kirim",
+      analyzing: "Menganalisis...",
+      score: "Skor",
+      nextScenario: "Berikutnya",
+      scenarioContext: "Konteks Skenario",
+      you: "Kamu",
+      aiFeedback: "Feedback & Rating AI",
+      strengths: "Kekuatan",
+      improvements: "Area untuk Ditingkatkan",
+      suggestion: "Saran"
     }
   }
-};
-
-// Add login page translations
-translations.english.loginPage = {
-  welcomeTo: "Welcome to",
-  appName: "RizzUp",
-  subtitle: "Boost your conversations, get AI suggestions, and improve your rizz",
-  continueWithGoogle: "Continue with Google",
-  signingIn: "Signing in...",
-  errorTitle: "Sign In Error",
-  errorMessage: "Failed to sign in with Google. Please try again."
-};
-
-translations.indonesia.loginPage = {
-  welcomeTo: "Selamat datang di",
-  appName: "RizzUp",
-  subtitle: "Tingkatkan percakapanmu, dapatkan saran AI, dan perbaiki rizz-mu",
-  continueWithGoogle: "Lanjutkan dengan Google",
-  signingIn: "Masuk...",
-  errorTitle: "Error Masuk",
-  errorMessage: "Gagal masuk dengan Google. Silakan coba lagi."
-};
-
-// Add profile page translations
-translations.english.profilePage = {
-  title: "Profile",
-  myStats: "My Stats",
-  rizzScore: "Rizz Score",
-  suggestionsUsed: "Suggestions Used",
-  conversationsStarted: "Conversations Started",
-  conversationsRated: "Conversations Rated",
-  settings: "Settings",
-  language: "Language",
-  english: "English",
-  indonesia: "Indonesia",
-  notifications: "Notifications",
-  notificationsDesc: "Get notified about tips and updates",
-  darkMode: "Dark Mode",
-  darkModeDesc: "Switch to dark theme",
-  account: "Account",
-  editProfile: "Edit Profile",
-  privacyPolicy: "Privacy Policy",
-  termsOfService: "Terms of Service",
-  logout: "Logout",
-  logoutConfirm: "Are you sure you want to logout?",
-  cancel: "Cancel",
-  confirmLogout: "Yes, Logout"
-};
-
-translations.indonesia.profilePage = {
-  title: "Profil",
-  myStats: "Statistik Saya",
-  rizzScore: "Skor Rizz",
-  suggestionsUsed: "Saran Digunakan",
-  conversationsStarted: "Percakapan Dimulai",
-  conversationsRated: "Percakapan Dinilai",
-  settings: "Pengaturan",
-  language: "Bahasa",
-  english: "English",
-  indonesia: "Indonesia",
-  notifications: "Notifikasi",
-  notificationsDesc: "Dapatkan notifikasi tentang tips dan update",
-  darkMode: "Mode Gelap",
-  darkModeDesc: "Beralih ke tema gelap",
-  account: "Akun",
-  editProfile: "Edit Profil",
-  privacyPolicy: "Kebijakan Privasi",
-  termsOfService: "Ketentuan Layanan",
-  logout: "Keluar",
-  logoutConfirm: "Apakah kamu yakin ingin keluar?",
-  cancel: "Batal",
-  confirmLogout: "Ya, Keluar"
 };

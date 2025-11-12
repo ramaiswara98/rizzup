@@ -6,7 +6,6 @@ import styles from './SuggestedReply.module.css';
 import Link from 'next/link';
 import { translations } from '@/translation';
 
-
 export default function SuggestedReply() {
   const [selectedTone, setSelectedTone] = useState('confident');
   const [uploadedFile, setUploadedFile] = useState(null);
@@ -94,6 +93,57 @@ export default function SuggestedReply() {
   const handleCopyText = (text) => {
     navigator.clipboard.writeText(text);
     alert(t.suggestedReplyPage.copied);
+  };
+
+  const handleSaveToHistory = async () => {
+    if (suggestions.length === 0) {
+      alert(t.suggestedReplyPage.failed);
+      return;
+    }
+
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user) {
+        alert('Please login first');
+        return;
+      }
+
+      const response = await fetch('/api/user/history', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          uid: user.uid,
+          type: 'suggested-reply',
+          data: { 
+            suggestions: suggestions, 
+            tone: selectedTone 
+          },
+          preview: suggestions[0]?.text || 'AI suggestions generated',
+          imageUrl: previewUrl
+        })
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        // Update user stats
+        await fetch('/api/user/update-stats', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            uid: user.uid,
+            type: 'suggestionUsed'
+          })
+        });
+
+        alert(t.suggestedReplyPage.saved);
+      } else {
+        alert(t.suggestedReplyPage.errorSaving);
+      }
+    } catch (error) {
+      console.error('Error saving to history:', error);
+      alert(t.suggestedReplyPage.errorSaving);
+    }
   };
 
   return (
@@ -229,16 +279,20 @@ export default function SuggestedReply() {
           )}
         </div>
 
-        {/* Bottom Actions */}
-        <div className={styles.bottomActions}>
-          <button className={styles.copyAndSendButton}>{t.suggestedReplyPage.copyAndSend}</button>
-          <button className={styles.saveToHistoryButton}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z" fill="currentColor"/>
-            </svg>
-            {t.suggestedReplyPage.saveToHistory}
-          </button>
-        </div>
+        {/* Bottom Actions - REPLACED WITH SAVE TO HISTORY ONLY */}
+        {suggestions.length > 0 && (
+          <div className={styles.bottomActions}>
+            <button 
+              className={styles.saveToHistoryButton}
+              onClick={handleSaveToHistory}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z" fill="currentColor"/>
+              </svg>
+              {t.suggestedReplyPage.saveToHistory}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
