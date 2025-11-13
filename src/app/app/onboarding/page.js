@@ -37,7 +37,7 @@ export default function RizzUpOnboarding() {
   const handleGetStarted = () => {
     // Mark onboarding as completed
     localStorage.setItem('onboardingCompleted', 'true');
-    router.push('/app/home');
+    router.push('/app/onboarding-rate-response');
   };
 
   const getSlideIcon = (index) => {

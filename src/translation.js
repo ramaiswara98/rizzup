@@ -207,7 +207,7 @@ export const translations = {
       suggestedReply: "Suggested Reply",
       boostConversation: "Boost Conversation",
       rateMyConvo: "Rate My Convo",
-      upgradeButton: "Upgrade Your Rizz",
+      upgradeButton: "Upgrade Rizz",
       termsText: "By continuing, you agree to our",
       termsOfService: "Terms of Service",
       and: "and",
@@ -229,6 +229,43 @@ export const translations = {
       strengths: "Strengths",
       improvements: "Areas to Improve",
       suggestion: "Suggestion"
+    },
+    paywallPage: {
+      title: "Choose Your Plan",
+      subtitle: "Unlock your full RizzUp potential",
+      tokens: "tokens",
+      perMonth: "/month",
+      selectPlan: "Select Plan",
+      popularBadge: "Popular",
+      price: "IDR",
+      charmPrice: "59,000",
+      auraPrice: "99,000",
+      features: {
+        charm: [
+          "1,500 AI tokens per month",
+          "Unlimited suggested replies",
+          "Conversation starters",
+          "Basic chat analysis",
+          "30-day history"
+        ],
+        aura: [
+          "5,000 AI tokens per month",
+          "Everything in Charm",
+          "Advanced chat analysis",
+          "Priority feedback",
+          "Unlimited history",
+          "Beta features access"
+        ]
+      },
+      charmTitle: "Charm",
+      charmSubtitle: "Perfect for getting started",
+      auraTitle: "Aura",
+      auraSubtitle: "For conversation masters",
+      restoreButton: "Restore Purchase",
+      termsText: "By subscribing, you agree to our",
+      termsOfService: "Terms of Service",
+      and: "and",
+      privacyPolicy: "Privacy Policy"
     }
   },
   indonesia: {
@@ -437,7 +474,7 @@ export const translations = {
       suggestedReply: "Saran Balasan",
       boostConversation: "Tingkatkan Percakapan",
       rateMyConvo: "Nilai Percakapan Saya",
-      upgradeButton: "Tingkatkan Rizz Kamu",
+      upgradeButton: "Tingkatkan Rizz",
       termsText: "Dengan melanjutkan, kamu setuju dengan",
       termsOfService: "Ketentuan Layanan",
       and: "dan",
@@ -459,6 +496,43 @@ export const translations = {
       strengths: "Kekuatan",
       improvements: "Area untuk Ditingkatkan",
       suggestion: "Saran"
+    },
+    paywallPage: {
+      title: "Pilih Plan Kamu",
+      subtitle: "Buka potensi penuh RizzUp-mu",
+      tokens: "tokens",
+      perMonth: "/bulan",
+      selectPlan: "Pilih Plan",
+      popularBadge: "Populer",
+      price: "IDR",
+      charmPrice: "59.000",
+      auraPrice: "99.000",
+      features: {
+        charm: [
+          "1,500 AI tokens per bulan",
+          "Saran balasan unlimited",
+          "Pembuka percakapan",
+          "Analisis chat dasar",
+          "Riwayat 30 hari"
+        ],
+        aura: [
+          "5,000 AI tokens per bulan",
+          "Semua dari Charm Plan",
+          "Analisis chat mendalam",
+          "Feedback prioritas",
+          "Riwayat unlimited",
+          "Akses fitur beta"
+        ]
+      },
+      charmTitle: "Charm",
+      charmSubtitle: "Sempurna untuk memulai",
+      auraTitle: "Aura",
+      auraSubtitle: "Untuk master percakapan",
+      restoreButton: "Restore Pembelian",
+      termsText: "Dengan berlangganan, kamu setuju dengan",
+      termsOfService: "Ketentuan Layanan",
+      and: "dan",
+      privacyPolicy: "Kebijakan Privasi"
     }
   }
 };

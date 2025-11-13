@@ -260,7 +260,7 @@ export default function RateResponsePage() {
                   )}
 
                   <Link
-                    href={'/app/home'}
+                    href={'/app/paywall'}
                     className={styles.nextButton}
                   >
                     {t.nextScenario}

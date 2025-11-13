@@ -53,8 +53,8 @@ export default function RizzUpLogin() {
       // Get Firebase ID token
       const idToken = await user.getIdToken();
       
-      // Send user data to MongoDB via API
-      const response = await fetch('/api/auth/save-user', {
+      // Check if user is new or existing
+      const checkUserResponse = await fetch('/api/auth/check-user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -62,21 +62,18 @@ export default function RizzUpLogin() {
         },
         body: JSON.stringify({
           uid: user.uid,
-          email: user.email,
-          displayName: user.displayName,
-          photoURL: user.photoURL,
-          language: language
+          email: user.email
         })
       });
 
-      const data = await response.json();
+      const checkUserData = await checkUserResponse.json();
       
-      if (!data.success) {
-        throw new Error('Failed to save user to database');
+      if (!checkUserData.success) {
+        throw new Error('Failed to check user status');
       }
-      
-      console.log('User saved to MongoDB:', data);
-      
+
+      console.log('User check result:', checkUserData);
+
       // Store user info in localStorage
       localStorage.setItem('user', JSON.stringify({
         uid: user.uid,
@@ -84,9 +81,51 @@ export default function RizzUpLogin() {
         displayName: user.displayName,
         photoURL: user.photoURL
       }));
-      
-      // Navigate to welcome page or home
-      router.push('/app/home');
+
+      // If new user, save to database
+      if (checkUserData.isNewUser) {
+        console.log('New user detected - saving to database');
+        
+        const saveUserResponse = await fetch('/api/auth/save-user', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${idToken}`
+          },
+          body: JSON.stringify({
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+            language: language
+          })
+        });
+
+        const saveUserData = await saveUserResponse.json();
+        
+        if (!saveUserData.success) {
+          throw new Error('Failed to save user to database');
+        }
+        
+        console.log('New user saved to MongoDB:', saveUserData);
+        
+        // Route new users to welcome/onboarding or paywall
+        router.push('/app/onboarding'); // or '/app/paywall' for immediate subscription
+        
+      } else {
+        console.log('Existing user detected');
+        
+        // Check if existing user has active subscription
+        if (checkUserData.hasSubscription) {
+          console.log('User has active subscription');
+          // Route to main app
+          router.push('/app/home');
+        } else {
+          console.log('User has no active subscription');
+          // Route to paywall to subscribe
+          router.push('/app/paywall');
+        }
+      }
       
     } catch (error) {
       console.error('Error signing in with Google:', error);
@@ -156,6 +195,14 @@ export default function RizzUpLogin() {
               {isLoading ? t.signingIn : t.continueWithGoogle}
             </span>
           </button>
+
+          {/* Loading Indicator */}
+          {isLoading && (
+            <div className={styles.loadingIndicator}>
+              <div className={styles.spinner}></div>
+              <p className={styles.loadingText}>Signing you in...</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
