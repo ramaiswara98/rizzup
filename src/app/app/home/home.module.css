@@ -36,6 +36,23 @@
   margin: 0;
 }
 
+/* Tokens Display - Top Right */
+.tokensDisplay {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #FFF4E6;
+  padding: 8px 14px;
+  border-radius: 20px;
+}
+
+.tokensNumber {
+  font-size: 16px;
+  font-weight: 700;
+  color: #FF9500;
+}
+
+/* Old rizz score styles - not used anymore */
 .rizzScore {
   display: flex;
   align-items: center;
@@ -193,6 +210,10 @@
   color: #FF9500;
 }
 
+.purpleText {
+  color: #7B61FF;
+}
+
 .statLabel {
   font-size: 14px;
   color: #666;
@@ -217,6 +238,7 @@
   padding: 8px;
   color: #999;
   transition: color 0.2s;
+  text-decoration: none;
 }
 
 .navItem.active {

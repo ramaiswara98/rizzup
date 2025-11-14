@@ -71,7 +71,7 @@ export default function PaywallPage() {
       const user = JSON.parse(localStorage.getItem('user'));
       if (!user) {
         alert('Please login first');
-        router.push('/login');
+        router.push('app/login');
         return;
       }
 

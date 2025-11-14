@@ -6,6 +6,8 @@ import styles from './RateRizz.module.css';
 import Link from 'next/link';
 import { translations } from '@/translation';
 
+const TOKEN_COST = 30; // Cost to analyze conversation
+
 export default function RateMyConvo() {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -16,6 +18,8 @@ export default function RateMyConvo() {
   const [scoreMessage, setScoreMessage] = useState('');
   const [feedbackItems, setFeedbackItems] = useState([]);
   const [language, setLanguage] = useState('english');
+  const [tokens, setTokens] = useState(0);
+  const [showInsufficientTokensModal, setShowInsufficientTokensModal] = useState(false);
 
   useEffect(() => {
     // Get language from localStorage
@@ -23,7 +27,26 @@ export default function RateMyConvo() {
     if (savedLanguage) {
       setLanguage(savedLanguage);
     }
+
+    // Fetch user tokens
+    fetchUserTokens();
   }, []);
+
+  const fetchUserTokens = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user) return;
+
+      const response = await fetch(`/api/user/home?uid=${user.uid}`);
+      const data = await response.json();
+      
+      if (data.success) {
+        setTokens(data.data.tokens || 0);
+      }
+    } catch (error) {
+      console.error('Error fetching tokens:', error);
+    }
+  };
 
   const t = translations[language];
 
@@ -43,6 +66,12 @@ export default function RateMyConvo() {
   const handleRankMyRizz = async () => {
     if (!uploadedFile) {
       alert(t.rateRizzPage.uploadFirst);
+      return;
+    }
+
+    // Check if user has enough tokens
+    if (tokens < TOKEN_COST) {
+      setShowInsufficientTokensModal(true);
       return;
     }
 
@@ -78,6 +107,9 @@ export default function RateMyConvo() {
           setScoreMessage(data.scoreMessage);
           setFeedbackItems(data.feedbackItems);
           setHasAnalyzed(true);
+
+          // Deduct tokens after successful analysis
+          await deductTokens(data.rizzScore);
         } else {
           alert(t.rateRizzPage.failed);
         }
@@ -94,6 +126,43 @@ export default function RateMyConvo() {
       console.error('Error analyzing conversation:', error);
       alert(t.rateRizzPage.errorAnalyzing);
       setIsAnalyzing(false);
+    }
+  };
+
+  const deductTokens = async (score) => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user) return;
+
+      console.log('Deducting tokens for conversation rating...');
+      console.log('Current tokens before deduction:', tokens);
+      console.log('Token cost:', TOKEN_COST);
+      console.log('Rizz score:', score);
+
+      const response = await fetch('/api/user/update-stats', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          uid: user.uid,
+          type: 'conversationRated',
+          tokenCost: TOKEN_COST,
+          rizzScore: score
+        })
+      });
+
+      const data = await response.json();
+      console.log('Token deduction response:', data);
+      
+      if (data.success) {
+        // Update local token count
+        const newTokenBalance = data.tokensRemaining || 0;
+        setTokens(newTokenBalance);
+        console.log(`Tokens updated: ${newTokenBalance} (deducted ${data.tokensDeducted})`);
+      } else {
+        console.error('Failed to deduct tokens:', data.error);
+      }
+    } catch (error) {
+      console.error('Error deducting tokens:', error);
     }
   };
 
@@ -145,22 +214,7 @@ export default function RateMyConvo() {
       console.log('History response:', data);
       
       if (data.success) {
-        console.log('History saved successfully, updating stats...');
-        
-        // Update user stats
-        const statsResponse = await fetch('/api/user/update-stats', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            uid: user.uid,
-            type: 'conversationRated',
-            rizzScore: rizzScore
-          })
-        });
-
-        const statsData = await statsResponse.json();
-        console.log('Stats response:', statsData);
-
+        console.log('History saved successfully');
         alert(t.rateRizzPage.saved);
       } else {
         console.error('Failed to save history:', data);
@@ -193,11 +247,14 @@ export default function RateMyConvo() {
             </svg>
           </Link>
           <h1 className={styles.title}>{t.rateRizzPage.title}</h1>
-          <button className={styles.historyButton}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9z" fill="currentColor"/>
+          {/* Tokens Display */}
+          <div className={styles.tokensDisplay}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="9" stroke="#FFA500" strokeWidth="2" fill="none"/>
+              <circle cx="12" cy="12" r="3" fill="#FFA500"/>
             </svg>
-          </button>
+            <span className={styles.tokensNumber}>{tokens}</span>
+          </div>
         </header>
 
         <div className={styles.content}>
@@ -252,7 +309,7 @@ export default function RateMyConvo() {
                 onClick={handleRankMyRizz}
                 disabled={isAnalyzing}
               >
-                {isAnalyzing ? t.rateRizzPage.analyzing : t.rateRizzPage.rankButton}
+                {isAnalyzing ? t.rateRizzPage.analyzing : `${t.rateRizzPage.rankButton} (${TOKEN_COST} tokens)`}
               </button>
             )}
           </div>
@@ -353,6 +410,44 @@ export default function RateMyConvo() {
               </svg>
               {t.rateRizzPage.saveToHistory}
             </button>
+          </div>
+        )}
+
+        {/* Insufficient Tokens Modal */}
+        {showInsufficientTokensModal && (
+          <div className={styles.modalOverlay} onClick={() => setShowInsufficientTokensModal(false)}>
+            <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+              <div className={styles.modalIcon}>
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="10" stroke="#FF9500" strokeWidth="2" fill="none"/>
+                  <path d="M12 8v4M12 16h.01" stroke="#FF9500" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </div>
+              <h3 className={styles.modalTitle}>Insufficient Tokens</h3>
+              <p className={styles.modalText}>
+                You need {TOKEN_COST} tokens to analyze your conversation, but you only have {tokens} tokens remaining.
+              </p>
+              <p className={styles.modalText}>
+                Please upgrade your plan or purchase more tokens to continue.
+              </p>
+              <div className={styles.modalButtons}>
+                <button 
+                  className={styles.cancelButton}
+                  onClick={() => setShowInsufficientTokensModal(false)}
+                >
+                  Cancel
+                </button>
+                <button 
+                  className={styles.confirmButton}
+                  onClick={() => {
+                    setShowInsufficientTokensModal(false);
+                    window.location.href = '/app/profile';
+                  }}
+                >
+                  Upgrade Plan
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>

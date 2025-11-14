@@ -485,3 +485,18 @@ input:checked + .slider:before {
   text-overflow: ellipsis;
   max-width: 100%;
 }
+
+.tokensDisplay {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  justify-content: center;
+}
+
+.tokensNumber {
+  font-size: 16px;
+  font-weight: 700;
+  color: #FFF;
+}

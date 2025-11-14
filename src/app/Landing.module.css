@@ -1,0 +1,327 @@
+/* Keyframe Animations */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes floatPhone {
+  0%, 100% {
+    transform: translateY(0px) scale(0.9);
+  }
+  50% {
+    transform: translateY(-15px) scale(0.9);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Hover Effects */
+.navBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
+}
+
+.btnPrimary:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+}
+
+.phoneFrame:hover {
+  transform: scale(1) !important;
+  opacity: 1 !important;
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
+}
+
+.suggestionCard:hover {
+  transform: translateX(4px);
+  border-color: #667eea;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.stepCard:hover {
+  transform: translateY(-10px);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(102, 126, 234, 0.5);
+  box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+}
+
+.featureCard:hover {
+  transform: translateY(-10px);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(102, 126, 234, 0.5);
+  box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+}
+
+.featureCard:hover .featureIconWrapper {
+  transform: scale(1.1) rotate(5deg);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.3));
+}
+
+.statCard:hover {
+  transform: translateY(-5px);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
+  box-shadow: 0 15px 30px rgba(102, 126, 234, 0.2);
+}
+
+.testimonialCard:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(102, 126, 234, 0.3);
+  box-shadow: 0 15px 30px rgba(102, 126, 234, 0.2);
+}
+
+.faqItem:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+.faqQuestion:hover {
+  color: #667eea;
+}
+
+.btnPrimaryCTA:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.footerLink:hover {
+  color: #667eea;
+}
+
+/* Responsive Design */
+@media (max-width: 968px) {
+  .heroContainer {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+  }
+  
+  .heroContent {
+    text-align: center !important;
+    max-width: 100% !important;
+  }
+  
+  .phoneMockupContainer {
+    transform: scale(0.8);
+  }
+  
+  .heroTitle {
+    font-size: 48px !important;
+  }
+  
+  .heroSubtitle {
+    font-size: 18px !important;
+  }
+  
+  .problemGrid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .arrow {
+    transform: rotate(90deg);
+    font-size: 36px !important;
+  }
+  
+  .mainTitle {
+    font-size: 36px !important;
+  }
+  
+  .ctaTitle {
+    font-size: 36px !important;
+  }
+  
+  .floatingCard {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .phoneMockupContainer {
+    transform: scale(0.6);
+    gap: 10px !important;
+  }
+  
+  .phoneFrame {
+    width: 240px !important;
+    height: 500px !important;
+  }
+  .navContainer {
+    padding: 16px 20px !important;
+  }
+  
+  .navLogo {
+    font-size: 24px !important;
+  }
+  
+  .heroTitle {
+    font-size: 36px !important;
+  }
+  
+  .heroSubtitle {
+    font-size: 16px !important;
+  }
+  
+  .btnPrimary {
+    padding: 16px 32px !important;
+    fontSize: 16px !important;
+  }
+  
+  .sectionTitle {
+    font-size: 24px !important;
+  }
+  
+  .mainTitle {
+    font-size: 28px !important;
+  }
+  
+  .mainSubtitle {
+    font-size: 16px !important;
+  }
+  
+  .ctaTitle {
+    font-size: 28px !important;
+  }
+  
+  .ctaSubtitle {
+    font-size: 16px !important;
+  }
+  
+  .btnPrimaryCTA {
+    padding: 16px 36px !important;
+    fontSize: 18px !important;
+  }
+}
+
+/* Scroll Animation Trigger */
+.animateOnScroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.animateOnScroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Gradient Animation */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Loading State */
+.loading {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection Color */
+::selection {
+  background: rgba(102, 126, 234, 0.3);
+  color: white;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #7c8ff0, #8b5ab8);
+}

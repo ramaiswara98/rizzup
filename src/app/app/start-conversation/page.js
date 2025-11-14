@@ -6,6 +6,8 @@ import styles from './StartConversation.module.css';
 import Link from 'next/link';
 import { translations } from '@/translation';
 
+const TOKEN_COST = 10; // Cost to generate conversation starters
+
 export default function StartConversation() {
   const [name, setName] = useState('');
   const [relation, setRelation] = useState('Friend');
@@ -15,6 +17,8 @@ export default function StartConversation() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [language, setLanguage] = useState('english');
+  const [tokens, setTokens] = useState(0);
+  const [showInsufficientTokensModal, setShowInsufficientTokensModal] = useState(false);
 
   useEffect(() => {
     // Get language from localStorage
@@ -22,13 +26,38 @@ export default function StartConversation() {
     if (savedLanguage) {
       setLanguage(savedLanguage);
     }
+
+    // Fetch user tokens
+    fetchUserTokens();
   }, []);
+
+  const fetchUserTokens = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user) return;
+
+      const response = await fetch(`/api/user/home?uid=${user.uid}`);
+      const data = await response.json();
+      
+      if (data.success) {
+        setTokens(data.data.tokens || 0);
+      }
+    } catch (error) {
+      console.error('Error fetching tokens:', error);
+    }
+  };
 
   const t = translations[language];
 
   const handleGenerate = async () => {
     if (!name.trim()) {
       alert(t.startConversationPage.enterName);
+      return;
+    }
+
+    // Check if user has enough tokens
+    if (tokens < TOKEN_COST) {
+      setShowInsufficientTokensModal(true);
       return;
     }
 
@@ -58,6 +87,9 @@ export default function StartConversation() {
         if (data.suggestedTopic && !topic.trim()) {
           setTopic(data.suggestedTopic);
         }
+
+        // Deduct tokens after successful generation
+        await deductTokens();
       } else {
         alert(t.startConversationPage.failed);
       }
@@ -67,6 +99,36 @@ export default function StartConversation() {
       console.error('Error generating suggestions:', error);
       alert(t.startConversationPage.errorGenerating);
       setIsGenerating(false);
+    }
+  };
+
+  const deductTokens = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user) return;
+
+      const response = await fetch('/api/user/update-stats', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          uid: user.uid,
+          type: 'conversationStarted',
+          tokenCost: TOKEN_COST
+        })
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        // Update local token count
+        const newTokenBalance = data.tokensRemaining || 0;
+        setTokens(newTokenBalance);
+        console.log(`Tokens updated: ${newTokenBalance} (deducted ${data.tokensDeducted})`);
+      } else {
+        console.error('Failed to deduct tokens:', data.error);
+      }
+    } catch (error) {
+      console.error('Error deducting tokens:', error);
     }
   };
 
@@ -126,21 +188,7 @@ export default function StartConversation() {
       console.log('History response:', data);
       
       if (data.success) {
-        console.log('History saved successfully, updating stats...');
-        
-        // Update user stats
-        const statsResponse = await fetch('/api/user/update-stats', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            uid: user.uid,
-            type: 'conversationStarted'
-          })
-        });
-
-        const statsData = await statsResponse.json();
-        console.log('Stats response:', statsData);
-
+        console.log('History saved successfully');
         alert(t.startConversationPage.saved);
       } else {
         console.error('Failed to save history:', data);
@@ -166,11 +214,14 @@ export default function StartConversation() {
             </svg>
           </Link>
           <h1 className={styles.title}>{t.startConversationPage.title}</h1>
-          <button className={styles.historyButton}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9z" fill="currentColor"/>
+          {/* Tokens Display */}
+          <div className={styles.tokensDisplay}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="9" stroke="#FFA500" strokeWidth="2" fill="none"/>
+              <circle cx="12" cy="12" r="3" fill="#FFA500"/>
             </svg>
-          </button>
+            <span className={styles.tokensNumber}>{tokens}</span>
+          </div>
         </header>
 
         <div className={styles.content}>
@@ -250,7 +301,7 @@ export default function StartConversation() {
             onClick={handleGenerate}
             disabled={isGenerating || !name.trim()}
           >
-            {isGenerating ? t.startConversationPage.generating : t.startConversationPage.generateButton}
+            {isGenerating ? t.startConversationPage.generating : `${t.startConversationPage.generateButton} (${TOKEN_COST} tokens)`}
           </button>
 
           {/* AI Suggestions */}
@@ -306,6 +357,44 @@ export default function StartConversation() {
               </svg>
               {t.startConversationPage.saveToHistory}
             </button>
+          </div>
+        )}
+
+        {/* Insufficient Tokens Modal */}
+        {showInsufficientTokensModal && (
+          <div className={styles.modalOverlay} onClick={() => setShowInsufficientTokensModal(false)}>
+            <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+              <div className={styles.modalIcon}>
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="10" stroke="#FF9500" strokeWidth="2" fill="none"/>
+                  <path d="M12 8v4M12 16h.01" stroke="#FF9500" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </div>
+              <h3 className={styles.modalTitle}>Insufficient Tokens</h3>
+              <p className={styles.modalText}>
+                You need {TOKEN_COST} tokens to generate conversation starters, but you only have {tokens} tokens remaining.
+              </p>
+              <p className={styles.modalText}>
+                Please upgrade your plan or purchase more tokens to continue.
+              </p>
+              <div className={styles.modalButtons}>
+                <button 
+                  className={styles.cancelButton}
+                  onClick={() => setShowInsufficientTokensModal(false)}
+                >
+                  Cancel
+                </button>
+                <button 
+                  className={styles.confirmButton}
+                  onClick={() => {
+                    setShowInsufficientTokensModal(false);
+                    window.location.href = '/app/profile';
+                  }}
+                >
+                  Upgrade Plan
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>

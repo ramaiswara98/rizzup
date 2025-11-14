@@ -31,11 +31,13 @@ export default function RizzUpProfile() {
     rizzScore: 0,
     suggestionsUsed: 0,
     conversationsStarted: 0,
-    conversationsRated: 0
+    conversationsRated: 0,
+    tokens:0
   });
   const [notifications, setNotifications] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [tokens, setTokens] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
@@ -52,9 +54,26 @@ export default function RizzUpProfile() {
       fetchUserStats(JSON.parse(savedUser).uid);
     } else {
       // Redirect to login if no user
-      router.push('/login');
+      router.push('/');
     }
+    fetchUserTokens();
   }, [router]);
+
+  const fetchUserTokens = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user) return;
+
+      const response = await fetch(`/api/user/home?uid=${user.uid}`);
+      const data = await response.json();
+      
+      if (data.success) {
+        setTokens(data.data.tokens || 0);
+      }
+    } catch (error) {
+      console.error('Error fetching tokens:', error);
+    }
+  };
 
   const fetchUserStats = async (uid) => {
     try {
@@ -79,7 +98,7 @@ export default function RizzUpProfile() {
       await signOut(auth);
       localStorage.removeItem('user');
       localStorage.removeItem('selectedLanguage');
-      router.push('/login');
+      router.push('/');
     } catch (error) {
       console.error('Error signing out:', error);
     }
@@ -117,6 +136,14 @@ export default function RizzUpProfile() {
             </div>
             <h2 className={styles.userName}>{user.displayName}</h2>
             <p className={styles.userEmail}>{user.email}</p>
+            {/* Tokens Display */}
+            <div className={styles.tokensDisplay}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="#FFF" strokeWidth="2" fill="none"/>
+                <circle cx="12" cy="12" r="3" fill="#FFF"/>
+              </svg>
+              <span className={styles.tokensNumber}>{tokens}</span>
+            </div>
           </div>
 
           {/* Stats Section */}

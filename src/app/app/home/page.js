@@ -5,23 +5,71 @@ import { useState, useEffect } from 'react';
 import styles from './home.module.css';
 import Link from 'next/link';
 import { translations } from '@/translation';
-// import { translations } from '@/translations';
 
 export default function RizzUpHome() {
-  const [rizzScore] = useState(75);
-  const [suggestionsUsed] = useState(8);
-  const [conversationsBoosted] = useState(3);
+  const [rizzScore, setRizzScore] = useState(0);
+  const [suggestionsUsed, setSuggestionsUsed] = useState(0);
+  const [conversationsBoosted, setConversationsBoosted] = useState(0);
+  const [tokens, setTokens] = useState(0);
   const [language, setLanguage] = useState('english');
+  const [loading, setLoading] = useState(true);
+  const [isPremium, setIsPremium] = useState(false);
 
   useEffect(() => {
-    // Get language from localStorage
-    const savedLanguage = localStorage.getItem('selectedLanguage');
-    if (savedLanguage) {
-      setLanguage(savedLanguage);
-    }
+    const initHome = async () => {
+      // Get language from localStorage
+      const savedLanguage = localStorage.getItem('selectedLanguage');
+      if (savedLanguage) {
+        setLanguage(savedLanguage);
+      }
+
+      // Get user from localStorage
+      const savedUser = localStorage.getItem('user');
+      if (savedUser) {
+        const userData = JSON.parse(savedUser);
+        await fetchHomeData(userData.uid);
+      } else {
+        setLoading(false);
+      }
+    };
+
+    initHome();
   }, []);
 
+  const fetchHomeData = async (uid) => {
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/user/home?uid=${uid}`);
+      const result = await response.json();
+      
+      if (result.success) {
+        const data = result.data;
+        setRizzScore(data.rizzScore || 0);
+        setSuggestionsUsed(data.suggestionsUsed || 0);
+        setConversationsBoosted(data.conversationsStarted || 0);
+        setTokens(data.tokens || 0);
+        setIsPremium(data.isPremium || false);
+      } else {
+        console.error('Failed to fetch home data:', result.error);
+      }
+    } catch (error) {
+      console.error('Error fetching home data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const t = translations[language];
+
+  if (loading) {
+    return (
+      <div className={styles.phoneFrame}>
+        <div className={styles.container}>
+          <div className={styles.loading}>Loading...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.phoneFrame}>
@@ -29,36 +77,13 @@ export default function RizzUpHome() {
         {/* Header */}
         <header className={styles.header}>
           <h1 className={styles.logo}>{t.logo}</h1>
-          <div className={styles.rizzScore}>
-            <span className={styles.scoreLabel}>{t.rizzScore}</span>
-            <div className={styles.scoreCircle}>
-              <svg width="50" height="50" viewBox="0 0 50 50">
-                {/* Gray background circle */}
-                <circle
-                  cx="25"
-                  cy="25"
-                  r="20"
-                  fill="none"
-                  stroke="#E0E0E0"
-                  strokeWidth="4"
-                  strokeDasharray="4 0"
-                  strokeLinecap="round"
-                />
-                {/* Orange dashed circle */}
-                <circle
-                  cx="25"
-                  cy="25"
-                  r="20"
-                  fill="none"
-                  stroke="#FFA500"
-                  strokeWidth="4"
-                  strokeDasharray="4 10"
-                  strokeLinecap="round"
-                  transform="rotate(-90 25 25)"
-                />
-              </svg>
-              <span className={styles.scoreNumber}>{rizzScore}</span>
-            </div>
+          {/* Tokens Display */}
+          <div className={styles.tokensDisplay}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="9" stroke="#FFA500" strokeWidth="2" fill="none"/>
+              <circle cx="12" cy="12" r="3" fill="#FFA500"/>
+            </svg>
+            <span className={styles.tokensNumber}>{tokens}</span>
           </div>
         </header>
 
@@ -134,6 +159,10 @@ export default function RizzUpHome() {
             <div className={styles.stat}>
               <div className={`${styles.statNumber} ${styles.orangeText}`}>{conversationsBoosted}</div>
               <div className={styles.statLabel}>{t.conversationsStarted}</div>
+            </div>
+            <div className={styles.stat}>
+              <div className={`${styles.statNumber} ${styles.purpleText}`}>{rizzScore}</div>
+              <div className={styles.statLabel}>{t.rizzScore}</div>
             </div>
           </div>
         </section>

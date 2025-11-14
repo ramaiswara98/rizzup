@@ -254,7 +254,7 @@ Bersikaplah keras tapi adil. Tujuannya adalah benar-benar membantu mereka dengan
     ];
 
     const result = await ai.models.generateContent({
-      model: "gemini-2.5-flash-lite",
+      model: "gemini-2.5-flash",
       contents: contents,
     });
 
