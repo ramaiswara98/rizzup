@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 
 const XENDIT_WEBHOOK_TOKEN = process.env.XENDIT_WEBHOOK_TOKEN;
+const XENDIT_API_KEY = process.env.XENDIT_SECRET_KEY;
 
 // Verify Xendit webhook signature
 function verifyXenditSignature(payload, signature) {
@@ -14,23 +15,46 @@ function verifyXenditSignature(payload, signature) {
   return hash === signature;
 }
 
+// Fetch invoice details from Xendit to get metadata
+async function fetchInvoice(invoiceId) {
+  const res = await fetch(`https://api.xendit.co/v2/invoices/${invoiceId}`, {
+    headers: {
+      'Authorization': `Basic ${Buffer.from(XENDIT_API_KEY + ':').toString('base64')}`,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch invoice: ${res.status}`);
+  }
+
+  return res.json();
+}
+
 export async function POST(request) {
   try {
     const payload = await request.json();
     const signature = request.headers.get('x-callback-token');
 
-    // Verify webhook authenticity (in production)
+    // Verify webhook authenticity (optional in production)
     // if (!verifyXenditSignature(payload, signature)) {
     //   return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
     // }
 
-    // Handle different payment statuses
-    const { status, external_id, metadata } = payload;
+    console.log('Xendit webhook received:', payload);
 
-    console.log('Xendit webhook received:', { status, external_id, metadata });
+    const { status, id: invoiceId, external_id } = payload;
 
     if (status === 'PAID' || status === 'SETTLED') {
-      // Payment successful - create subscription
+      // Fetch invoice to get metadata
+      const invoice = await fetchInvoice(invoiceId);
+      const { metadata } = invoice;
+
+      if (!metadata) {
+        console.error('No metadata found on invoice:', invoiceId);
+        return NextResponse.json({ success: false, error: 'No metadata' }, { status: 400 });
+      }
+
       const { uid, plan, tokens } = metadata;
 
       // Save subscription to your database
@@ -38,10 +62,10 @@ export async function POST(request) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          uid: uid,
-          plan: plan,
-          tokens: tokens,
-          paymentId: payload.id,
+          uid,
+          plan,
+          tokens,
+          paymentId: invoiceId,
           externalId: external_id,
         }),
       });
@@ -50,10 +74,7 @@ export async function POST(request) {
 
       if (!subscriptionData.success) {
         console.error('Failed to create subscription:', subscriptionData);
-        return NextResponse.json(
-          { success: false, error: 'Failed to create subscription' },
-          { status: 500 }
-        );
+        return NextResponse.json({ success: false, error: 'Failed to create subscription' }, { status: 500 });
       }
 
       console.log('Subscription created successfully:', subscriptionData);
@@ -70,14 +91,10 @@ export async function POST(request) {
 
   } catch (error) {
     console.error('Webhook error:', error);
-    return NextResponse.json(
-      { success: false, error: 'Webhook processing failed' },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: 'Webhook processing failed' }, { status: 500 });
   }
 }
 
-// Disable body parsing to get raw body for signature verification
 export const config = {
   api: {
     bodyParser: true,
