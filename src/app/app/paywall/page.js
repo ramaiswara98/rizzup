@@ -76,7 +76,7 @@ export default function PaywallPage() {
       }
 
       // Check if user has existing subscription
-      const response = await fetch(`/api/subscription/check?uid=${user.uid}`);
+      const response = await fetch(`/api/subscription/status?uid=${user.uid}`);
       const data = await response.json();
 
       if (data.hasSubscription) {
