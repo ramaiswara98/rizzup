@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import styles from './History.module.css';
 import { translations } from '@/translation';
+import Image from 'next/image';
 
 export default function RizzUpHistory() {
   const [language, setLanguage] = useState('english');
@@ -122,23 +123,17 @@ export default function RizzUpHistory() {
         return (
           <div className={styles.detailsContent}>
             <div className={styles.detailsSection}>
-              <h4 className={styles.detailsLabel}>Name:</h4>
-              <p className={styles.detailsText}>{selectedItem.data?.name || 'N/A'}</p>
-            </div>
-            <div className={styles.detailsSection}>
-              <h4 className={styles.detailsLabel}>Relation:</h4>
-              <p className={styles.detailsText}>{selectedItem.data?.relation || 'N/A'}</p>
-            </div>
-            <div className={styles.detailsSection}>
-              <h4 className={styles.detailsLabel}>Topic:</h4>
-              <p className={styles.detailsText}>{selectedItem.data?.topic || 'Not specified'}</p>
-            </div>
-            <div className={styles.detailsSection}>
               <h4 className={styles.detailsLabel}>Tone:</h4>
               <p className={styles.detailsText}>{selectedItem.data?.tone || 'N/A'}</p>
             </div>
+            {selectedItem.imageUrl && (
+              <div className={styles.detailsSection}>
+                <h4 className={styles.detailsLabel}>Image:</h4>
+                <img src={selectedItem.imageUrl} alt="Story" className={styles.detailsImage} />
+              </div>
+            )}
             <div className={styles.detailsSection}>
-              <h4 className={styles.detailsLabel}>Conversation Starters:</h4>
+              <h4 className={styles.detailsLabel}>AI Suggestions:</h4>
               {selectedItem.data?.suggestions?.map((suggestion, index) => (
                 <div key={index} className={styles.suggestionDetail}>
                   <p className={styles.suggestionText}>{suggestion.text}</p>
@@ -282,8 +277,13 @@ export default function RizzUpHistory() {
         <div className={styles.content}>
           {loading ? (
             <div className={styles.loadingState}>
-              <div className={styles.spinner}></div>
-              <p>Loading history...</p>
+              {/* <div className={styles.spinner}></div> */}
+              <Image 
+                          src="/svg/loading.svg" 
+                          alt="Loading" 
+                          width={100} 
+                          height={100} 
+                        />
             </div>
           ) : history.length === 0 ? (
             <div className={styles.emptyState}>

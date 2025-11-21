@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import styles from './home.module.css';
 import Link from 'next/link';
 import { translations } from '@/translation';
+import Image from 'next/image';
 
 export default function RizzUpHome() {
   const [rizzScore, setRizzScore] = useState(0);
@@ -65,7 +66,14 @@ export default function RizzUpHome() {
     return (
       <div className={styles.phoneFrame}>
         <div className={styles.container}>
-          <div className={styles.loading}>Loading...</div>
+          <div className={styles.loading}>
+            <Image 
+            src="/svg/loading.svg" 
+            alt="Loading" 
+            width={100} 
+            height={100} 
+          />
+          </div>
         </div>
       </div>
     );

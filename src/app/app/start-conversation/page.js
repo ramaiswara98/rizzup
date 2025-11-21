@@ -1,4 +1,4 @@
-// components/StartConversation.jsx
+// components/SuggestedReply.jsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -6,14 +6,12 @@ import styles from './StartConversation.module.css';
 import Link from 'next/link';
 import { translations } from '@/translation';
 
-const TOKEN_COST = 10; // Cost to generate conversation starters
+const TOKEN_COST = 30; // Cost to generate suggestions
 
-export default function StartConversation() {
-  const [name, setName] = useState('');
-  const [relation, setRelation] = useState('Friend');
-  const [topic, setTopic] = useState('');
-  const [selectedTone, setSelectedTone] = useState('friendly');
-  const [selectedSuggestion, setSelectedSuggestion] = useState(null);
+export default function SuggestedReply() {
+  const [selectedTone, setSelectedTone] = useState('confident');
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [language, setLanguage] = useState('english');
@@ -49,9 +47,21 @@ export default function StartConversation() {
 
   const t = translations[language];
 
-  const handleGenerate = async () => {
-    if (!name.trim()) {
-      alert(t.startConversationPage.enterName);
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setUploadedFile(file);
+      // Create preview URL for images
+      if (file.type.startsWith('image/')) {
+        const url = URL.createObjectURL(file);
+        setPreviewUrl(url);
+      }
+    }
+  };
+
+  const handleGenerateSuggestions = async () => {
+    if (!uploadedFile) {
+      alert(t.startConversationPage.uploadFirst);
       return;
     }
 
@@ -64,40 +74,50 @@ export default function StartConversation() {
     setIsGenerating(true);
 
     try {
-      const response = await fetch('/api/start-conversation', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: name.trim(),
-          relation: relation,
-          topic: topic.trim() || null, // Send null if empty so AI can suggest
-          tone: selectedTone,
-          language: language, // Pass language to API
-        }),
-      });
+      // Convert file to base64
+      const reader = new FileReader();
+      reader.readAsDataURL(uploadedFile);
+      
+      reader.onload = async () => {
+        const base64Data = reader.result.split(',')[1]; // Remove data:image/jpeg;base64, prefix
+        
+        // Call your API route
+        const response = await fetch('/api/start-conversation-image', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            imageData: base64Data,
+            mimeType: uploadedFile.type,
+            tone: selectedTone,
+            language: language, // Pass language to API
+          }),
+        });
 
-      const data = await response.json();
-      console.log('AI Response:', data);
-
-      if (data.success && data.suggestions) {
-        setSuggestions(data.suggestions);
-        // If AI suggested a topic, update the input
-        if (data.suggestedTopic && !topic.trim()) {
-          setTopic(data.suggestedTopic);
+        const data = await response.json();
+        console.log('AI Response:', data);
+        
+        if (data.success && data.suggestions) {
+          setSuggestions(data.suggestions);
+          
+          // Deduct tokens after successful generation
+          await deductTokens();
+        } else {
+          alert(t.startConversationPage.failed);
         }
+        
+        setIsGenerating(false);
+      };
 
-        // Deduct tokens after successful generation
-        await deductTokens();
-      } else {
+      reader.onerror = () => {
+        console.error('Error reading file');
         alert(t.startConversationPage.failed);
-      }
-
-      setIsGenerating(false);
+        setIsGenerating(false);
+      };
     } catch (error) {
       console.error('Error generating suggestions:', error);
-      alert(t.startConversationPage.errorGenerating);
+      alert(t.startConversationPage.failed);
       setIsGenerating(false);
     }
   };
@@ -132,66 +152,44 @@ export default function StartConversation() {
     }
   };
 
-  const handleSelectSuggestion = (index) => {
-    setSelectedSuggestion(index);
-  };
-
   const handleCopyText = (text) => {
     navigator.clipboard.writeText(text);
     alert(t.startConversationPage.copied);
   };
 
   const handleSaveToHistory = async () => {
-    console.log('Save to history clicked');
-    console.log('Suggestions:', suggestions);
-    console.log('Name:', name);
-    
     if (suggestions.length === 0) {
       alert(t.startConversationPage.failed);
       return;
     }
 
     try {
-      const userString = localStorage.getItem('user');
-      console.log('User string from localStorage:', userString);
-      
-      if (!userString) {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user) {
         alert('Please login first');
         return;
       }
 
-      const user = JSON.parse(userString);
-      console.log('Parsed user:', user);
-
-      const historyData = {
-        uid: user.uid,
-        type: 'start-conversation',
-        data: { 
-          name: name,
-          relation: relation,
-          topic: topic,
-          tone: selectedTone,
-          suggestions: suggestions 
-        },
-        preview: `Conversation with ${name}: ${suggestions[0]?.text || ''}`
-      };
-
-      console.log('Sending history data:', historyData);
-
       const response = await fetch('/api/user/history', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(historyData)
+        body: JSON.stringify({
+          uid: user.uid,
+          type: 'start-conversation',
+          data: { 
+            suggestions: suggestions, 
+            tone: selectedTone 
+          },
+          preview: suggestions[0]?.text || 'AI suggestions generated',
+          imageUrl: previewUrl
+        })
       });
 
       const data = await response.json();
-      console.log('History response:', data);
       
       if (data.success) {
-        console.log('History saved successfully');
         alert(t.startConversationPage.saved);
       } else {
-        console.error('Failed to save history:', data);
         alert(t.startConversationPage.errorSaving);
       }
     } catch (error) {
@@ -213,7 +211,7 @@ export default function StartConversation() {
               <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/>
             </svg>
           </Link>
-          <h1 className={styles.title}>{t.startConversationPage.title}</h1>
+          <h1 className={styles.title}>{t.startConversation.title}</h1>
           {/* Tokens Display */}
           <div className={styles.tokensDisplay}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -225,54 +223,53 @@ export default function StartConversation() {
         </header>
 
         <div className={styles.content}>
-          {/* Name Input */}
-          <div className={styles.formGroup}>
-            <label className={styles.label}>{t.startConversationPage.nameLabel}</label>
-            <input
-              type="text"
-              className={styles.input}
-              placeholder={t.startConversationPage.namePlaceholder}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+          {/* Upload Section */}
+          <div className={styles.uploadSection}>
+            {previewUrl ? (
+              <div className={styles.previewContainer}>
+                <img src={previewUrl} alt="Preview" className={styles.previewImage} />
+                <button 
+                  className={styles.removeButton}
+                  onClick={() => {
+                    setUploadedFile(null);
+                    setPreviewUrl(null);
+                  }}
+                >
+                  ✕ {t.startConversationPage.remove}
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className={styles.uploadIcon}>
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="white"/>
+                  </svg>
+                </div>
+                <h2 className={styles.uploadTitle}>{t.startConversationPage.uploadTitle}</h2>
+                <p className={styles.uploadSubtitle}>{t.startConversationPage.uploadSubtitle}</p>
+              </>
+            )}
+            <input 
+              type="file" 
+              id="fileInput" 
+              accept="image/*"
+              onChange={handleFileChange}
+              style={{ display: 'none' }}
             />
-          </div>
-
-          {/* Relation Dropdown */}
-          <div className={styles.formGroup}>
-            <label className={styles.label}>{t.startConversationPage.relationLabel}</label>
-            <div className={styles.selectWrapper}>
-              <select
-                className={styles.select}
-                value={relation}
-                onChange={(e) => setRelation(e.target.value)}
-              >
-                <option value="Friend">{t.startConversationPage.relations.friend}</option>
-                <option value="Partner">{t.startConversationPage.relations.partner}</option>
-                <option value="Colleague">{t.startConversationPage.relations.colleague}</option>
-                <option value="Family">{t.startConversationPage.relations.family}</option>
-                <option value="Crush">{t.startConversationPage.relations.crush}</option>
-              </select>
-              <svg className={styles.selectArrow} width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M7 10l5 5 5-5z" fill="currentColor"/>
-              </svg>
-            </div>
-          </div>
-
-          {/* Topic Input */}
-          <div className={styles.formGroup}>
-            <label className={styles.label}>{t.startConversationPage.topicLabel}</label>
-            <input
-              type="text"
-              className={styles.input}
-              placeholder={t.startConversationPage.topicPlaceholder}
-              value={topic}
-              onChange={(e) => setTopic(e.target.value)}
-            />
+            <button 
+              className={styles.chooseFileButton}
+              onClick={() => document.getElementById('fileInput').click()}
+            >
+              {uploadedFile ? t.startConversationPage.changeFile : t.startConversationPage.chooseFile}
+            </button>
+            {uploadedFile && (
+              <p className={styles.fileName}>{uploadedFile.name}</p>
+            )}
           </div>
 
           {/* Tone Selection */}
-          <div className={styles.formGroup}>
-            <label className={styles.label}>{t.startConversationPage.toneLabel}</label>
+          <div className={styles.toneSection}>
+            <h3 className={styles.sectionTitle}>{t.startConversationPage.chooseTone}</h3>
             <div className={styles.toneButtons}>
               <button 
                 className={`${styles.toneButton} ${selectedTone === 'friendly' ? styles.selected : ''}`}
@@ -293,16 +290,16 @@ export default function StartConversation() {
                 {t.startConversationPage.tones.flirty}
               </button>
             </div>
+            
+            {/* Generate Button */}
+            <button 
+              className={styles.generateButton}
+              onClick={handleGenerateSuggestions}
+              disabled={isGenerating || !uploadedFile}
+            >
+              {isGenerating ? t.startConversationPage.generating : `${t.startConversationPage.generateButton} (${TOKEN_COST} tokens)`}
+            </button>
           </div>
-
-          {/* Generate Button */}
-          <button 
-            className={styles.generateButton}
-            onClick={handleGenerate}
-            disabled={isGenerating || !name.trim()}
-          >
-            {isGenerating ? t.startConversationPage.generating : `${t.startConversationPage.generateButton} (${TOKEN_COST} tokens)`}
-          </button>
 
           {/* AI Suggestions */}
           {(suggestions.length > 0 || isGenerating) && (
@@ -311,22 +308,14 @@ export default function StartConversation() {
               
               {isGenerating ? (
                 <div className={styles.loadingState}>
-                  <p>{t.startConversationPage.generatingMessage}</p>
+                  <p>{t.startConversationPage.analyzing}</p>
                 </div>
               ) : (
                 suggestions.map((suggestion, index) => (
                   <div key={index} className={styles.suggestionCard}>
                     <p className={styles.suggestionText}>{suggestion.text}</p>
                     <div className={styles.suggestionActions}>
-                      <button 
-                        className={`${styles.selectButton} ${selectedSuggestion === index ? styles.selectedButton : ''}`}
-                        onClick={() => handleSelectSuggestion(index)}
-                      >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/>
-                        </svg>
-                        {selectedSuggestion === index ? t.startConversationPage.selected : t.startConversationPage.select}
-                      </button>
+                      <button className={styles.selectButton}>{t.startConversationPage.select}</button>
                       <button 
                         className={styles.copyButton}
                         onClick={() => handleCopyText(suggestion.text)}
@@ -372,7 +361,7 @@ export default function StartConversation() {
               </div>
               <h3 className={styles.modalTitle}>Insufficient Tokens</h3>
               <p className={styles.modalText}>
-                You need {TOKEN_COST} tokens to generate conversation starters, but you only have {tokens} tokens remaining.
+                You need {TOKEN_COST} tokens to generate suggestions, but you only have {tokens} tokens remaining.
               </p>
               <p className={styles.modalText}>
                 Please upgrade your plan or purchase more tokens to continue.
@@ -388,6 +377,7 @@ export default function StartConversation() {
                   className={styles.confirmButton}
                   onClick={() => {
                     setShowInsufficientTokensModal(false);
+                    // TODO: Navigate to upgrade/purchase page
                     window.location.href = '/app/profile';
                   }}
                 >

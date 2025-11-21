@@ -35,9 +35,9 @@ export default function PaymentSuccessClient() {
   return (
     <div className={styles.container}>
       <div className={styles.successCard}>
-        <h1>Payment Successful!</h1>
-        <p>Thank you for subscribing to {selectedPlan.name}</p>
-        <p>Redirecting in {countdown} seconds...</p>
+        <h1 className={styles.title}>Payment Successful!</h1>
+        <p className={styles.subtitle}>Thank you for subscribing to {selectedPlan.name}</p>
+        <p className={styles.subtitle}>Redirecting in {countdown} seconds...</p>
         <button onClick={() => router.push('/app/home')}>Go Home Now</button>
       </div>
     </div>

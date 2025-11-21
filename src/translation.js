@@ -18,7 +18,7 @@ export const translations = {
       title: "Rate My Rizz",
       description: "Get AI feedback on your chat and improve your rizz"
     },
-    progressTitle: "Today's Progress",
+    progressTitle: "Progress",
     suggestionsUsed: "Suggestions Used",
     conversationsStarted: "Conversations Started",
     nav: {
@@ -275,17 +275,17 @@ export const translations = {
     welcomeSubtitle: "Siap meningkatkan percakapanmu?",
     suggestedReply: {
       title: "Saran Balasan",
-      description: "Dapatkan saran AI untuk membalas cerita atau chat"
+      description: "Upload screenshot chatmu untuk mendapatkan saran balasan"
     },
     startConversation: {
       title: "Mulai Percakapan",
-      description: "Mulai percakapan dengan bantuan AI"
+      description: "Upload gambar atau screenshot story untuk mulai percakapan"
     },
     rateRizz: {
       title: "Nilai Rizz Saya",
-      description: "Dapatkan feedback AI untuk chat-mu dan tingkatkan rizz-mu"
+      description: "Upload screenshot chatmu, dapatkan feedback untuk tingkatkan rizz-mu"
     },
-    progressTitle: "Progress Hari Ini",
+    progressTitle: "Progress",
     suggestionsUsed: "Saran Digunakan",
     conversationsStarted: "Percakapan Dimulai",
     nav: {
@@ -295,8 +295,8 @@ export const translations = {
     },
     suggestedReplyPage: {
       title: "Saran Balasan",
-      uploadTitle: "Unggah gambar atau story",
-      uploadSubtitle: "Dapatkan saran AI untuk balasan yang sempurna",
+      uploadTitle: "Unggah Screenshot Chat Kamu",
+      uploadSubtitle: "Dapatkan saran balasan yang sempurna dalam hitungan detik 😉",
       chooseFile: "Pilih File",
       changeFile: "Ganti File",
       remove: "Hapus",
@@ -321,6 +321,31 @@ export const translations = {
       errorSaving: "Gagal menyimpan ke riwayat"
     },
     startConversationPage: {
+      title: "Saran Balasan",
+      uploadTitle: "Unggah gambar atau story",
+      uploadSubtitle: "Mulai percakapan tanpa kaku dalam hitungan detik 😉",
+      chooseFile: "Pilih File",
+      changeFile: "Ganti File",
+      remove: "Hapus",
+      chooseTone: "Pilih nada bicara",
+      tones: {
+        friendly: "😊 Ramah",
+        confident: "💪 Percaya Diri",
+        flirty: "😏 Gombal"
+      },
+      generateButton: "Buat Saran",
+      generating: "Membuat...",
+      aiSuggestions: "Saran AI",
+      analyzing: "Menganalisis gambar dan membuat saran...",
+      select: "Pilih",
+      copy: "Salin",
+      copyAndSend: "Salin & Kirim",
+      saveToHistory: "Simpan ke Riwayat",
+      uploadFirst: "Mohon unggah gambar terlebih dahulu",
+      failed: "Gagal membuat saran. Silakan coba lagi.",
+      copied: "Disalin ke clipboard!",
+      saved: "Tersimpan ke riwayat!",
+      errorSaving: "Gagal menyimpan ke riwayat",
       title: "Mulai Percakapan",
       nameLabel: "Nama",
       namePlaceholder: "Masukkan nama mereka",
@@ -361,7 +386,7 @@ export const translations = {
     rateRizzPage: {
       title: "Nilai Percakapan Saya",
       uploadTitle: "Unggah Screenshot Chat",
-      uploadSubtitle: "Unggah screenshot chat-mu untuk feedback AI",
+      uploadSubtitle: "Dapatkan saran dan penilaian untuk meningkatkan rizz mu 😉",
       chooseFile: "Pilih File",
       changeFile: "Ganti File",
       remove: "Hapus",
@@ -453,12 +478,12 @@ export const translations = {
         {
           title: "Dapatkan Saran Balasan",
           subtitle: "Tidak pernah kehabisan kata",
-          description: "Unggah story atau screenshot chat dan dapatkan balasan sempurna dari AI dengan nada pilihanmu"
+          description: "Unggah screenshot chat dan dapatkan balasan sempurna dari AI dengan nada pilihanmu"
         },
         {
           title: "Mulai Percakapan",
           subtitle: "Pecahkan kebekuan dengan percaya diri",
-          description: "Dapatkan pembuka percakapan personal berdasarkan dengan siapa kamu bicara dan apa yang ingin dibahas"
+          description: "Unggah foto atau screenshot story dan mulai percakapan personal tanpa akward"
         },
         {
           title: "Nilai Rizz Kamu",
@@ -510,7 +535,7 @@ export const translations = {
       features: {
         charm: [
           "1,500 AI tokens per bulan",
-          "Saran balasan unlimited",
+          "Saran balasan",
           "Pembuka percakapan",
           "Analisis chat dasar",
           "Riwayat 30 hari"

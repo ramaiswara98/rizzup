@@ -9,15 +9,40 @@ import { translations } from '@/translation';
 export default function RizzUpOnboarding() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [language, setLanguage] = useState('english');
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    // Get language from localStorage
-    const savedLanguage = localStorage.getItem('selectedLanguage');
-    if (savedLanguage) {
-      setLanguage(savedLanguage);
+    // Check if user is logged in
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      
+      if (!user || !user.uid) {
+        // User not logged in, redirect to login
+        router.push('/app/login');
+        return;
+      }
+
+      // Check if onboarding already completed
+      const onboardingCompleted = localStorage.getItem('onboardingCompleted');
+      if (onboardingCompleted === 'true') {
+        // Onboarding already done, redirect to home
+        router.push('/app/home');
+        return;
+      }
+
+      // Get language from localStorage
+      const savedLanguage = localStorage.getItem('selectedLanguage');
+      if (savedLanguage) {
+        setLanguage(savedLanguage);
+      }
+
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Error checking user:', error);
+      router.push('/login');
     }
-  }, []);
+  }, [router]);
 
   const t = translations[language].onboardingPage;
   const slides = t.slides;
@@ -79,6 +104,19 @@ export default function RizzUpOnboarding() {
         return null;
     }
   };
+
+  // Show loading state while checking authentication
+  if (isLoading) {
+    return (
+      <div className={styles.phoneFrame}>
+        <div className={styles.container}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+            <p>Loading...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.phoneFrame}>

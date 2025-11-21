@@ -10,6 +10,7 @@ import styles from './Profile.module.css';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signOut } from 'firebase/auth';
 import { translations } from '@/translation';
+import Image from 'next/image';
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -39,9 +40,11 @@ export default function RizzUpProfile() {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [tokens, setTokens] = useState(0);
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Get language from localStorage
+    setLoading(true);
     const savedLanguage = localStorage.getItem('selectedLanguage');
     if (savedLanguage) {
       setLanguage(savedLanguage);
@@ -57,6 +60,7 @@ export default function RizzUpProfile() {
       router.push('/');
     }
     fetchUserTokens();
+    setLoading(false);
   }, [router]);
 
   const fetchUserTokens = async () => {
@@ -106,8 +110,21 @@ export default function RizzUpProfile() {
 
   const t = translations[language].profilePage;
 
-  if (!user) {
-    return <div className={styles.loading}>Loading...</div>;
+  if (loading) {
+    return (
+      <div className={styles.phoneFrame}>
+        <div className={styles.container}>
+          <div className={styles.loading}>
+            <Image 
+            src="/svg/loading.svg" 
+            alt="Loading" 
+            width={100} 
+            height={100} 
+          />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -231,7 +248,7 @@ export default function RizzUpProfile() {
             </div>
 
             {/* Notifications Setting */}
-            <div className={styles.settingItem}>
+            {/* <div className={styles.settingItem}>
               <div className={styles.settingInfo}>
                 <div className={styles.settingIcon}>🔔</div>
                 <div>
@@ -247,10 +264,10 @@ export default function RizzUpProfile() {
                 />
                 <span className={styles.slider}></span>
               </label>
-            </div>
+            </div> */}
 
             {/* Dark Mode Setting */}
-            <div className={styles.settingItem}>
+            {/* <div className={styles.settingItem}>
               <div className={styles.settingInfo}>
                 <div className={styles.settingIcon}>🌙</div>
                 <div>
@@ -266,20 +283,20 @@ export default function RizzUpProfile() {
                 />
                 <span className={styles.slider}></span>
               </label>
-            </div>
+            </div> */}
           </div>
 
           {/* Account Section */}
           <div className={styles.section}>
             <h3 className={styles.sectionTitle}>{t.account}</h3>
             
-            <button className={styles.accountItem}>
+            {/* <button className={styles.accountItem}>
               <span className={styles.accountIcon}>✏️</span>
               <span className={styles.accountText}>{t.editProfile}</span>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" fill="#999"/>
               </svg>
-            </button>
+            </button> */}
 
             <button className={styles.accountItem}>
               <span className={styles.accountIcon}>🔒</span>

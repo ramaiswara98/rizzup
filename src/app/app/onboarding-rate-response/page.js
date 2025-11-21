@@ -5,6 +5,7 @@ import { Send, RefreshCw, ThumbsUp, ArrowRight } from 'lucide-react';
 import styles from './OnboardingRateResponse.module.css';
 import { translations } from '@/translation';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function RateResponsePage() {
   const [language, setLanguage] = useState('english');
@@ -14,8 +15,16 @@ export default function RateResponsePage() {
   const [isGenerating, setIsGenerating] = useState(true); // start loading immediately
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [hasReplied, setHasReplied] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+      
+      if (!user || !user.uid) {
+        // User not logged in, redirect to login
+        router.push('/app/login');
+        return;
+      }
     const savedLanguage = localStorage.getItem('selectedLanguage');
     if (savedLanguage) setLanguage(savedLanguage);
 
